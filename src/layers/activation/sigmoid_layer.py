@@ -1,3 +1,5 @@
+import numpy as np
+
 class Sigmoid_layer():
     """
     Class that implement a Sigmoid layer, it uses the Sigmoid function.
@@ -6,11 +8,11 @@ class Sigmoid_layer():
 
     Cons:
     - Sigmoids saturate and kill gradients. A very undesirable property of the 
-    sigmoid neuron is that when the neuron’s activation saturates at either 
+    sigmoid neuron is that when the neuron's activation saturates at either
     tail of 0 or 1, the gradient at these regions is almost zero. Recall that 
     during backpropagation, this (local) gradient will be multiplied to the 
-    gradient of this gate’s output for the whole objective. Therefore, if the 
-    local gradient is very small, it will effectively “kill” the gradient and 
+    gradient of this gate's output for the whole objective. Therefore, if the 
+    local gradient is very small, it will effectively "kill" the gradient and 
     almost no signal will flow through the neuron to its weights and recursively
     to its data. Additionally, one must pay extra caution when initializing the
     weights of sigmoid neurons to prevent saturation. For example, if the 
@@ -47,7 +49,7 @@ class Sigmoid_layer():
         :rtype out: A numpy array of the same shape as x.
         """
         #Apply Sigmoid function.
-        out = 1.0 / (1.0 + np.exp(-x))
+        out = 1.0 / (1.0 +np.exp(-x))
         return out
 
     def backward(self, dout):

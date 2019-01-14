@@ -5,3 +5,5 @@ class Net(object):
         """
         layers = list of layers
         """
+        print('not implemented yet')
+        self.test = 9

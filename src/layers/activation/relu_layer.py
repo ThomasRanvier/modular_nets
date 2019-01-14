@@ -15,13 +15,13 @@ class Relu_layer():
     
     Cons:
         - Unfortunately, ReLU units can be fragile during training and can 
-        “die”. For example, a large gradient flowing through a ReLU neuron could
+        "die". For example, a large gradient flowing through a ReLU neuron could
         cause the weights to update in such a way that the neuron will never 
         activate on any datapoint again. If this happens, then the gradient 
         flowing through the unit will forever be zero from that point on. 
         That is, the ReLU units can irreversibly die during training since they 
         can get knocked off the data manifold. For example, you may find that as
-        much as 40% of your network can be “dead” (i.e. neurons that never 
+        much as 40% of your network can be "dead" (i.e. neurons that never 
         activate across the entire training dataset) if the learning rate is set
         too high. With a proper setting of the learning rate this is less 
         frequently an issue.
@@ -32,7 +32,6 @@ class Relu_layer():
         """
         Instantiates a ReLU layer.
         """
-        self.cache = None
         self.layer_mode = 'activation'
 
     def forward(self, x):
@@ -45,8 +44,6 @@ class Relu_layer():
         """
         #Apply ReLU function.
         out = np.maximum(0, x)
-        #Save the value in the cache.
-        self.cache = x
         return out
 
     def backward(self, dout):
@@ -58,9 +55,6 @@ class Relu_layer():
         :return dx: Gradient with respect of x.
         :rtype dx: A numpy array of same shape as dout.
         """
-        #Extract the value from the cache.
-        x = self.cache
         #Apply the derivative of the ReLU function.
-        dx = dout
-        dx[x <= 0] = 0
+        dx = 1.0 * (0 < dout)
         return dx

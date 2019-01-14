@@ -12,7 +12,6 @@ class Leaky_relu_layer():
         """
         Instantiates a Leaky ReLU layer.
         """
-        self.cache = None
         self.alpha = alpha
         self.layer_mode = 'activation'
         
@@ -27,8 +26,6 @@ class Leaky_relu_layer():
         """
         #Apply Leaky ReLU function.
         out = np.maximum(self.alpha * x, x)
-        #Save the value in the cache.
-        self.cache = x
         return out
 
     def backward(self, dout):
@@ -40,9 +37,7 @@ class Leaky_relu_layer():
         :return dx: Gradient with respect of x.
         :rtype dx: A numpy array of same shape as dout.
         """
-        #Extract the value from the cache.
-        x = self.cache
         #Apply the derivative of the Leaky ReLU function.
-        dx = dout
-        dx[x <= 0] = self.alpha
+        dx = 1.0 * (dout > 0)
+        dx[dx == 0] = self.alpha
         return dx
