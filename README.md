@@ -2,7 +2,7 @@
 
 This is a library to create neural networks in an easy modular way using numpy.
 I develop this in parallel of following the CS231N course of Stanford University
-of 2017, [http://cs231n.stanford.edu/](link to the course).
+of 2017, [link to the course](http://cs231n.stanford.edu/).
 
 The point of this library is for me to check my knowledge and eventually use it 
 in some projects later.
