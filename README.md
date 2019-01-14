@@ -1,4 +1,4 @@
-# Modular conv nets
+# Modular nets
 
 This is a library to create neural networks in an easy modular way using numpy.
 I develop this in parallel of following the CS231N course of Stanford University
