@@ -31,8 +31,8 @@ class Batch_norm_layer():
             self.running_var = mom * self.running_var + (1.0 - mom) * var
             self.cache = (var, x_norm)
         elif mode == 'test':
-            x_norm = (x - self.running_mean) / 
-                np.sqrt(self.running_var + self.epsilon)
+            eps = self.epsilon
+            x_norm = (x - self.running_mean) / np.sqrt(self.running_var + eps)
             out = x_norm * self.gamma + self.beta
         else:
             raise ValueError('Invalid forward batch norm mode "%s"' % mode)
@@ -46,8 +46,8 @@ class Batch_norm_layer():
 
         std_inv = 1.0 / np.sqrt(var + self.epsilon)
         dx_hat = dout * self.gamma
-        dx = (1.0 / N) * std_inv * (N * dx_hat - np.sum(dx_hat, axis=0) - x_norm
-                * np.sum(dx_hat * x_norm, axis=0))
+        dx = (1.0 / N) * std_inv * (N * dx_hat - np.sum(dx_hat, axis=0) - \
+                x_norm * np.sum(dx_hat * x_norm, axis=0))
         self.beta = np.sum(dout, axis=0)
         self.gamma = np.sum(x_norm * dout, axis=0)
         return dx
