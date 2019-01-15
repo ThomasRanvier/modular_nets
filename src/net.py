@@ -1,5 +1,5 @@
 import numpy as np
-from src.initialisers.he import He
+from src.initialiser import Initialiser
 
 class Net(object):
     """
@@ -11,8 +11,8 @@ class Net(object):
     You can set the initialiser with an initialiser object, the default one is
     He.
     """
-    def __init__(self, layers, input_size, output_size, initialiser = He()
-            , reg = 0.0):
+    def __init__(self, layers, input_size, output_size, 
+            initialiser = Initialiser(), reg = 0.0):
         """
         Instantiates a neural network with the layers and initialiser that you 
         want.

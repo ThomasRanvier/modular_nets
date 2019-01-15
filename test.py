@@ -1,10 +1,10 @@
-from src.layers.affine_layer import Affine_layer
-from src.layers.normalisation.batch_norm_layer import Batch_norm_layer
-from src.layers.activation.relu_layer import Relu_layer
-from src.layers.activation.leaky_relu_layer import Leaky_relu_layer
-from src.layers.activation.sigmoid_layer import Sigmoid_layer
-from src.layers.activation.tanh_layer import Tanh_layer
-from src.net import Net
+from src import Affine_layer
+from src import Batch_norm_layer
+from src import Relu_layer
+from src import Leaky_relu_layer
+from src import Sigmoid_layer
+from src import Tanh_layer
+from src import Net
 
 input_size = 1200
 output_size = 10
