@@ -5,6 +5,7 @@ from src import Leaky_relu_layer
 from src import Sigmoid_layer
 from src import Tanh_layer
 from src import Net
+from src import Initialiser
 
 input_size = 1200
 output_size = 10
@@ -25,7 +26,5 @@ layers.append(Batch_norm_layer())
 layers.append(Sigmoid_layer())
 layers.append(Affine_layer(100))
 
-net = Net(layers, input_size, output_size)
-
-#TODO: Put initialisers in one file and just select what method we want through 
-#a parameter
+initialiser = Initialiser(config = {'method': 'normal', 'std_dev': 5e-2})
+net = Net(layers, input_size, output_size, initialiser = initialiser)
