@@ -1,5 +1,6 @@
 import numpy as np
 from src.initialiser import Initialiser
+from src.loss_computer import Loss_computer
 
 class Net(object):
     """
@@ -11,8 +12,8 @@ class Net(object):
     You can set the initialiser with an initialiser object, the default one is
     He.
     """
-    def __init__(self, layers, input_size, output_size, 
-            initialiser = Initialiser(), reg = 0.0):
+    def __init__(self, layers, input_size, output_size, initialiser = Initialiser(),
+            loss_computer = Loss_computer(), reg = 0.0):
         """
         Instantiates a neural network with the layers and initialiser that you 
         want.
@@ -28,6 +29,8 @@ class Net(object):
         :type initialiser: initialiser Object.
         """
         self.layers = layers
+        self.loss_computer = loss_computer
+        #Recuperate the sizes of each connected layer.
         self.layers_sizes = [input_size]
         for layer in layers:
             if layer.layer_type == 'connected':
@@ -56,5 +59,15 @@ class Net(object):
         scores = out
         if mode == 'test':
             return scores
-        #Compute loss.
-        #For each layer call backward.
+        #Compute the loss.
+        loss, dx = loss_computer.compute_loss(scores, y)
+        #For each layer call backward, and recuperate dw and db for connected ones.
+        grads = []
+        for layer in self.layers[::-1]:
+            if layer.layer_type == 'connected':
+                dx, dw, db = layer.backward(dx)
+                #Stock dw and db in grads and apply the regularisation to dw.
+                grads.append({'w': dw + (self.reg * dw), 'b': db})
+            else:
+                dx = layer.backward(dx)
+        return loss, grads
