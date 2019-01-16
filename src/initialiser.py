@@ -22,30 +22,33 @@ class Initialiser(object):
         self.seed = seed
         self.config = config
 
-    def initialise(self, layers_sizes):
+    def initialise(self, layers, layers_sizes):
         """
         Performs an initialisation of the weights and biases for the network.
-        :param layers_sizes: The sizes of the layers, input and output layers 
-                            included.
+        :param layers: The layers.
+        :type layers: A list of layer Objects.
+        :param layers_sizes: The layers sizes.
         :type layers_sizes: A list of integers.
         """
         np.random.seed(self.seed)
-        weights = []
-        biases = []
-        for i in range(len(layers_sizes) - 1):
-            #Define the 2 dimensions of the weights.
-            d_1 = layers_sizes[i]
-            d_2 = layers_sizes[i + 1]
-            #Get the initialisation method to use.
-            if not hasattr(self, self.config['method']):
-                raise ValueError('Invalid initialisation method: ' + \
-                        self.config[method])
-            initialisation_method = getattr(self, self.config['method'])
-            #Set the weights.
-            weights.append(initialisation_method(d_1, d_2))
-            #Set the biases at a numpy array of zeros.
-            biases.append(np.zeros(d_2))
-        return (weights, biases)
+        index = 0
+        for layer in layers:
+            if layer.layer_type == 'connected':
+                #Define the 2 dimensions of the weights.
+                d_1 = layers_sizes[index]
+                d_2 = layers_sizes[index + 1]
+                #Get the initialisation method to use.
+                if not hasattr(self, self.config['method']):
+                    raise ValueError('Invalid initialisation method: ' + \
+                            self.config[method])
+                initialisation_method = getattr(self, self.config['method'])
+                #Set the weights.
+                layer.weights = []
+                layer.weights.append(initialisation_method(d_1, d_2))
+                #Set the biases at a numpy array of zeros.
+                layer.biases = []
+                layer.biases.append(np.zeros(d_2))
+                index += 1
 
     def he_normal(self, d_1, d_2):
         """

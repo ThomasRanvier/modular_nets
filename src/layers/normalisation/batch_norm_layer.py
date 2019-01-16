@@ -31,7 +31,7 @@ class Batch_norm_layer():
         self.running_var = None
         self.epsilon = epsilon
         self.momentum = momentum
-        self.layer_mode = 'normalisation'
+        self.layer_type = 'normalisation'
 
     def forward(self, x, mode):
         """

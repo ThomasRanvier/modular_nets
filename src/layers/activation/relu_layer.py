@@ -32,7 +32,7 @@ class Relu_layer():
         """
         Instantiates a ReLU layer.
         """
-        self.layer_mode = 'activation'
+        self.layer_type = 'activation'
 
     def forward(self, x):
         """

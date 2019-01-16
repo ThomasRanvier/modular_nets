@@ -13,7 +13,7 @@ class Leaky_relu_layer():
         Instantiates a Leaky ReLU layer.
         """
         self.alpha = alpha
-        self.layer_mode = 'activation'
+        self.layer_type = 'activation'
         
     def forward(self, x):
         """

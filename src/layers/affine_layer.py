@@ -12,17 +12,15 @@ class Affine_layer():
         """
         self.cache = None
         self.size = size
-        self.layer_mode = 'connected'
+        self.layer_type = 'connected'
+        self.weigths = None
+        self.biases = None
 
-    def forward(self, x, w, b):
+    def forward(self, x):
         """
         Computes the forward pass of the affine layer.
         :param x: The N input data.
         :type x: A numpy array of shape (N, d_1, ..., d_k).
-        :param w: The weights to apply to the input data.
-        :type w: A numpy array of shape (D, M).
-        :param b: The biases to apply to the input data.
-        :type b: A numpy array of shape (M,).
         :return out: The computed output.
         :rtype out: A numpy array of shape (N, M).
         """
@@ -31,9 +29,9 @@ class Affine_layer():
         reshaped_x = x.reshape(new_x_shape)
         #Compute the forward pass of this layer as a dot product between the 
         #input and the weights, then add the biases.
-        out = np.dot(reshaped_x, w) + b
+        out = np.dot(reshaped_x, self.weigths) + self.biases
         #Save the values in the cache.
-        self.cache = (x, w, b)
+        self.cache = x
         return out
 
     def backward(self, dout):
@@ -49,15 +47,15 @@ class Affine_layer():
         :rtype db: A numpy array of shape (M,).
         """
         #Extract the values from the cache.
-        x, w, b = self.cache
+        x = self.cache
         #Compute the gradient with respect of x 
         #and reshape it to the same dims as x.
-        dx = np.dot(dout, w.T).reshape(x.shape)
+        dx = np.dot(dout, self.weigths.T).reshape(x.shape)
         #Reshape x into rows.
         new_x_shape = (x.shape[0], -1)
         reshaped_x = x.reshape(new_x_shape)
-        #Compute the gradient with respect of w.
+        #Compute the gradient with respect of the weights.
         dw = np.dot(reshaped_x.T, dout)
-        #Compute the gradient with respect of b.
+        #Compute the gradient with respect of the biases.
         db = np.sum(dout, axis=0)
         return dx, dw, db

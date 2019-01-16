@@ -38,7 +38,7 @@ class Sigmoid_layer():
         """
         Instantiates a Sigmoid layer.
         """
-        self.layer_mode = 'activation'
+        self.layer_type = 'activation'
 
     def forward(self, x):
         """

@@ -27,11 +27,34 @@ class Net(object):
         He.
         :type initialiser: initialiser Object.
         """
+        self.layers = layers
         self.layers_sizes = [input_size]
         for layer in layers:
-            if layer.layer_mode == 'connected':
+            if layer.layer_type == 'connected':
                 self.layers_sizes.append(layer.size)
         self.layers_sizes.append(output_size)
-        #Initialise the weights and biases
-        self.weights, self. biases = initialiser.initialise(self.layers_sizes)
+        #Initialise the weights and biases.
+        initialiser.initialise(self.layers, self.layers_sizes)
         self.reg = reg
+
+    def loss(self, X, y = None):
+        """
+        Computes the loss and gradients of a minibatch.
+        :param X: The input datas.
+        :type X: A numpy array of shape (N, d_1, ..., d_k).
+        :param y: The labels.
+        :type y: A numpy array of shape (N,)
+        """
+        mode = 'test' if y == None else 'train'
+        out = X
+        #For each layer call forward.
+        for layer in self.layers:
+            if layer.layer_type == 'connected' or layer.layer_type == 'activation':
+                out = layer.forward(out)
+            elif layer.layer_type == 'normalisation':
+                out = layer.forward(out, mode)
+        scores = out
+        if mode == 'test':
+            return scores
+        #Compute loss.
+        #For each layer call backward.

@@ -13,7 +13,7 @@ class Tanh_layer():
         """
         Instantiates a Tanh layer.
         """
-        self.layer_mode = 'activation'
+        self.layer_type = 'activation'
 
     def forward(self, x):
         """
