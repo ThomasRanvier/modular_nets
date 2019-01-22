@@ -13,7 +13,7 @@ class Affine_layer():
         self.cache = None
         self.size = size
         self.layer_type = 'connected'
-        self.weigths = None
+        self.weights = None
         self.biases = None
 
     def forward(self, x):
@@ -29,7 +29,7 @@ class Affine_layer():
         reshaped_x = x.reshape(new_x_shape)
         #Compute the forward pass of this layer as a dot product between the 
         #input and the weights, then add the biases.
-        out = np.dot(reshaped_x, self.weigths) + self.biases
+        out = np.dot(reshaped_x, self.weights) + self.biases
         #Save the values in the cache.
         self.cache = x
         return out
@@ -50,7 +50,7 @@ class Affine_layer():
         x = self.cache
         #Compute the gradient with respect of x 
         #and reshape it to the same dims as x.
-        dx = np.dot(dout, self.weigths.T).reshape(x.shape)
+        dx = np.dot(dout, self.weights.T).reshape(x.shape)
         #Reshape x into rows.
         new_x_shape = (x.shape[0], -1)
         reshaped_x = x.reshape(new_x_shape)

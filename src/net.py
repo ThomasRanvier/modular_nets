@@ -1,6 +1,7 @@
 import numpy as np
 from src.initialiser import Initialiser
 from src.loss_computer import Loss_computer
+from src.layers.affine_layer import Affine_layer
 
 class Net(object):
     """
@@ -18,7 +19,7 @@ class Net(object):
         Instantiates a neural network with the layers and initialiser that you 
         want.
         :param layers: A list containing all the layers that you want in the 
-        network.
+        network. /!\ It should not include an output layer!
         :type layers: A list of layers objects.
         :param input_size: The size of the input of the network.
         :type input_size: integer.
@@ -35,6 +36,7 @@ class Net(object):
         for layer in layers:
             if layer.layer_type == 'connected':
                 self.layers_sizes.append(layer.size)
+        self.layers.append(Affine_layer(output_size))
         self.layers_sizes.append(output_size)
         #Initialise the weights and biases.
         initialiser.initialise(self.layers, self.layers_sizes)
@@ -47,8 +49,12 @@ class Net(object):
         :type X: A numpy array of shape (N, d_1, ..., d_k).
         :param y: The labels.
         :type y: A numpy array of shape (N,)
+        :return loss: The computed loss.
+        :rtype loss: float.
+        :return grads: The computed gradients, from the first layer to the last.
+        :rtype grads: list.
         """
-        mode = 'test' if y == None else 'train'
+        mode = 'test' if y is None else 'train'
         out = X
         #For each layer call forward.
         for layer in self.layers:
@@ -60,7 +66,7 @@ class Net(object):
         if mode == 'test':
             return scores
         #Compute the loss.
-        loss, dx = loss_computer.compute_loss(scores, y)
+        loss, dx = self.loss_computer.compute_loss(scores, y)
         #For each layer call backward, and recuperate dw and db for connected ones.
         grads = []
         for layer in self.layers[::-1]:
@@ -70,4 +76,4 @@ class Net(object):
                 grads.append({'w': dw + (self.reg * dw), 'b': db})
             else:
                 dx = layer.backward(dx)
-        return loss, grads
+        return loss, grads[::-1]

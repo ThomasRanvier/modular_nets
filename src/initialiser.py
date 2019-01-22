@@ -43,12 +43,27 @@ class Initialiser(object):
                             self.config[method])
                 initialisation_method = getattr(self, self.config['method'])
                 #Set the weights.
-                layer.weights = []
-                layer.weights.append(initialisation_method(d_1, d_2))
+                layer.weights = initialisation_method(d_1, d_2)
                 #Set the biases at a numpy array of zeros.
-                layer.biases = []
-                layer.biases.append(np.zeros(d_2))
+                layer.biases = np.zeros(d_2)
                 index += 1
+                """
+        for i in range(len(layers)):
+            if layers[i].layer_type == 'connected':
+                #Define the 2 dimensions of the weights.
+                d_1 = layers_sizes[index]
+                d_2 = layers_sizes[index + 1]
+                #Get the initialisation method to use.
+                if not hasattr(self, self.config['method']):
+                    raise ValueError('Invalid initialisation method: ' + \
+                            self.config[method])
+                initialisation_method = getattr(self, self.config['method'])
+                #Set the weights.
+                layers[i].weights = initialisation_method(d_1, d_2)
+                #Set the biases at a numpy array of zeros.
+                layers[i].biases = np.zeros(d_2)
+                index += 1
+                """
 
     def he_normal(self, d_1, d_2):
         """

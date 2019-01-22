@@ -45,7 +45,7 @@ class Batch_norm_layer():
         """
         N, D = x.shape
         #Initialise the variables if they are not already.
-        if self.gamma == None:
+        if self.gamma is None:
             self.gamma = np.ones(D)
             self.beta = np.zeros(D)
             self.running_mean = np.zeros(D)

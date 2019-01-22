@@ -40,7 +40,7 @@ class Rms_prop():
         """
         #If cache is not initialised it is set at a numpy array full of zeros of
         #the same shape as w.
-        if self.cache == None:
+        if self.cache is None:
             self.cache = np.zeros_like(w)
         dr = self.decay_rate
         self.cache = dr * self.cache + (1 - dr) * dw**2

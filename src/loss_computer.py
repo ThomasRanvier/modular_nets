@@ -1,3 +1,5 @@
+import numpy as np
+
 class Loss_computer():
     """
     Class that implements a loss computer, used to compute the loss from the score 
@@ -12,7 +14,7 @@ class Loss_computer():
         """
         if not hasattr(self, method):
             raise ValueError('Invalid loss method: ' + method)
-        self.method = method
+        self.method = getattr(self, method)
 
     def compute_loss(self, x, y):
         """

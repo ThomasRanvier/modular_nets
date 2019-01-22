@@ -39,7 +39,7 @@ class Adam():
         :rtype w: A numpy array of the same shape as w.
         """
         #If not initialised set the m and v variable to zero arrays, set t to 1.
-        if self.m == None:
+        if self.m is None:
             self.m = np.zeros_like(w)
             self.v = np.zeros_like(w)
             self.t = 1

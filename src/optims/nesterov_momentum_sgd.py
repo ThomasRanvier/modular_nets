@@ -46,7 +46,7 @@ class Nesterov_momentum_sgd():
         """
         #If not initialised set the velocity to a numpy array full of zeros of 
         #the same shape as w.
-        if self.velocity == None:
+        if self.velocity is None:
             self.velocity = np.zeros_like(w)
         #Backup the velocity.
         v_prev = self.velocity

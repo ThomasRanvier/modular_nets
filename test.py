@@ -1,30 +1,33 @@
-from src import Affine_layer
-from src import Batch_norm_layer
-from src import Relu_layer
-from src import Leaky_relu_layer
-from src import Sigmoid_layer
-from src import Tanh_layer
-from src import Net
-from src import Initialiser
+import numpy as np
+from src import *
 
-input_size = 1200
-output_size = 10
+input_size = 5
+output_size = 2
 
-layers = []
+hidden_layers = []
 
-layers.append(Affine_layer(260))
-layers.append(Batch_norm_layer())
-layers.append(Relu_layer())
-layers.append(Affine_layer(220))
-layers.append(Batch_norm_layer())
-layers.append(Leaky_relu_layer())
-layers.append(Affine_layer(180))
-layers.append(Batch_norm_layer())
-layers.append(Tanh_layer())
-layers.append(Affine_layer(140))
-layers.append(Batch_norm_layer())
-layers.append(Sigmoid_layer())
-layers.append(Affine_layer(100))
+hidden_layers.append(Affine_layer(4))
+hidden_layers.append(Batch_norm_layer())
+hidden_layers.append(Relu_layer())
+hidden_layers.append(Affine_layer(3))
+hidden_layers.append(Batch_norm_layer())
+hidden_layers.append(Leaky_relu_layer())
 
 initialiser = Initialiser(config = {'method': 'normal', 'std_dev': 5e-2})
-net = Net(layers, input_size, output_size, initialiser = initialiser)
+net = Net(hidden_layers, input_size, output_size, initialiser = initialiser)
+
+X_train = np.array([[1, 2, 3, 4, 5],
+                    [2, 3, 4, 5, 6],
+                    [3, 4, 5, 6, 7],
+                    [4, 5, 6, 7, 8]])
+y_train = np.array([0, 1, 0, 1])
+X_val = np.array([[1, 2, 3, 4, 5],
+                    [2, 3, 4, 5, 6],
+                    [3, 4, 5, 6, 7],
+                    [4, 5, 6, 7, 8]])
+y_val = np.array([0, 1, 0, 1]) 
+
+datas = {'X_train': X_train, 'y_train': y_train, 'X_val': X_val, 'y_val': y_val}
+
+solver = Solver(net, datas, verbose = True, num_epochs = 50)
+solver.train()
