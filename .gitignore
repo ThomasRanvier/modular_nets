@@ -1,3 +1,4 @@
 .ipynb_checkpoints/
 .env
 *.pyc
+cifar-10-batches-py

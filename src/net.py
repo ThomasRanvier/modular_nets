@@ -36,7 +36,7 @@ class Net(object):
         for layer in layers:
             if layer.layer_type == 'connected':
                 self.layers_sizes.append(layer.size)
-        self.layers.append(Affine_layer(output_size))
+        #self.layers.append(Affine_layer(output_size))
         self.layers_sizes.append(output_size)
         #Initialise the weights and biases.
         initialiser.initialise(self.layers, self.layers_sizes)

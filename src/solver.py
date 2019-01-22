@@ -47,7 +47,7 @@ class Solver(object):
         #Create a new optimiser object for each connected layer in the model (The
         #first layer not being a connected layer).
         default_optim = []
-        for _ in range(len(self.model.layers_sizes) - 1):
+        for _ in range(len(self.model.layers_sizes) - 2):
             default_optim.append(Adam())
         self.optim = kwargs.pop('optim', default_optim)
         self.lr_decay = kwargs.pop('lr_decay', 1.0)

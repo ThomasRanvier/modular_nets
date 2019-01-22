@@ -8,3 +8,8 @@ from src.net import Net
 from src.solver import Solver
 from src.initialiser import Initialiser
 from src.loss_computer import Loss_computer
+from src.optims.sgd import Sgd
+from src.optims.adam import Adam
+from src.optims.rms_prop import Rms_prop
+from src.optims.momentum_sgd import Momentum_sgd
+from src.optims.nesterov_momentum_sgd import Nesterov_momentum_sgd
