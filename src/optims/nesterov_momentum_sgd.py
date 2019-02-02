@@ -15,9 +15,9 @@ class Nesterov_momentum_sgd():
     know that the momentum term alone (i.e. ignoring the second term with the 
     gradient) is about to nudge the parameter vector by mu * v.
     Therefore, if we are about to compute the gradient, we can treat the future
-    approximate position x + mu * v as a “lookahead” - this is a point in the 
+    approximate position x + mu * v as a "lookahead" - this is a point in the 
     vicinity of where we are soon going to end up. Hence, it makes sense to 
-    compute the gradient at x + mu * v instead of at the “old/stale” position x.
+    compute the gradient at x + mu * v instead of at the "old/stale" position x.
 
     Link to the course: http://cs231n.github.io/neural-networks-3/#sgd
     """

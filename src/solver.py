@@ -20,8 +20,8 @@ class Solver(object):
             - 'X_val': Validation datas.
             - 'y_val': Validation labels.
         :param **kwargs: Optional parameters:
-            - optim: The optimiser to use, can be any optimiser object found under
-              the optims directory.
+            - optims: The optimisers to use, a list of any optimiser object found 
+              under the optims directory.
             - lr_decay: A scalar for learning rate decay; after each epoch the
               learning rate is multiplied by this value.
             - batch_size: Size of minibatches used to compute loss and gradient
@@ -46,10 +46,10 @@ class Solver(object):
 
         #Create a new optimiser object for each connected layer in the model (The
         #first layer not being a connected layer).
-        default_optim = []
+        default_optims = []
         for _ in range(len(self.model.layers_sizes) - 1):
-            default_optim.append(Adam())
-        self.optim = kwargs.pop('optim', default_optim)
+            default_optims.append(Adam())
+        self.optims = kwargs.pop('optims', default_optims)
         self.lr_decay = kwargs.pop('lr_decay', 1.0)
         self.batch_size = kwargs.pop('batch_size', 100)
         self.num_epochs = kwargs.pop('num_epochs', 10)
@@ -92,7 +92,7 @@ class Solver(object):
         for layer in self.model.layers:
             if layer.layer_type == 'connected':
                 dw = grads[i]['w']
-                layer.weights = self.optim[i].update(layer.weights, dw)
+                layer.weights = self.optims[i].update(layer.weights, dw)
                 i += 1
 
     def __save_checkpoint(self):
@@ -102,7 +102,7 @@ class Solver(object):
         if self.checkpoint_name is None: return
         checkpoint = {
           'model': self.model,
-          'optim': self.optim,
+          'optims': self.optims,
           'lr_decay': self.lr_decay,
           'batch_size': self.batch_size,
           'num_train_samples': self.num_train_samples,
@@ -154,6 +154,29 @@ class Solver(object):
         acc = np.mean(y_pred == y)
         return acc
 
+    def predict(self, X, batch_size = 100):
+        """
+        Predict the result of the model on the provided datas.
+        :param X: The datas to check.
+        :type X: A numpy array of shape (N, d_1, ..., d_k).
+        :param batch_size: Split X and y into batches of this size to avoid using
+        too much memory.
+        :type batch_size: integer.
+        """
+        #Compute predictions in batches
+        N = X.shape[0]
+        num_batches = N // batch_size
+        if N % batch_size != 0:
+            num_batches += 1
+        y_pred = []
+        for i in range(num_batches):
+            start = i * batch_size
+            end = (i + 1) * batch_size
+            scores = self.model.loss(X[start:end])
+            y_pred.append(np.argmax(scores, axis=1))
+        y_pred = np.hstack(y_pred)
+        return y_pred
+
     def train(self):
         """
         Train the model with the given datas.
@@ -171,8 +194,8 @@ class Solver(object):
             epoch_end = (t + 1) % iterations_per_epoch == 0
             if epoch_end:
                 self.epoch += 1
-                for i in range(len(self.optim)):
-                    self.optim[i].learning_rate *= self.lr_decay
+                for i in range(len(self.optims)):
+                    self.optims[i].learning_rate *= self.lr_decay
             #Check train and val accuracy on the first iteration, the last
             #iteration, and at the end of each epoch.
             first_it = (t == 0)

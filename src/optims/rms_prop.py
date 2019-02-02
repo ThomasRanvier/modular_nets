@@ -7,7 +7,7 @@ class Rms_prop():
     RMSprop is a very effective, but currently unpublished adaptive learning 
     rate method.
     Amusingly, everyone who uses this method in their work currently cites slide
-    29 of Lecture 6 of Geoff Hinton’s Coursera class.
+    29 of Lecture 6 of Geoff Hinton's Coursera class.
     The RMSProp update adjusts the Adagrad method in a very simple way in an 
     attempt to reduce its aggressive, monotonically decreasing learning rate.
 

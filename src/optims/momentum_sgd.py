@@ -9,14 +9,14 @@ class Momentum_sgd():
     This update can be motivated from a physical perspective of the optimization
     problem.
     In particular, the loss can be interpreted as the height of a hilly terrain 
-    (and therefore also to the potential energy since U=mgh and therefore U∝h).
+    (and therefore also to the potential energy since U=mgh and therefore Uah).
     Initializing the parameters with random numbers is equivalent to setting a 
     particle with zero initial velocity at some location. 
     The optimization process can then be seen as equivalent to the process of 
     simulating the parameter vector (i.e. a particle) as rolling on the 
     landscape.
     Since the force on the particle is related to the gradient of potential 
-    energy (i.e. F=−∇U ), the force felt by the particle is precisely the 
+    energy (i.e. F=-dU), the force felt by the particle is precisely the
     (negative) gradient of the loss function.
     Moreover, F=ma so the (negative) gradient is in this view proportional to 
     the acceleration of the particle.

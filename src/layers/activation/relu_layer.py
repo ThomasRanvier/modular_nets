@@ -32,6 +32,7 @@ class Relu_layer():
         """
         Instantiates a ReLU layer.
         """
+        self.cache = None
         self.layer_type = 'activation'
 
     def forward(self, x):
@@ -44,6 +45,7 @@ class Relu_layer():
         """
         #Apply ReLU function.
         out = np.maximum(0, x)
+        self.cache = x
         return out
 
     def backward(self, dout):
@@ -56,5 +58,6 @@ class Relu_layer():
         :rtype dx: A numpy array of same shape as dout.
         """
         #Apply the derivative of the ReLU function.
-        dx = 1.0 * (0 < dout)
+        dx = dout
+        dx[self.cache <= 0] = 0
         return dx

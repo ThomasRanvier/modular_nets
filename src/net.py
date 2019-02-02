@@ -71,9 +71,12 @@ class Net(object):
         grads = []
         for layer in self.layers[::-1]:
             if layer.layer_type == 'connected':
+                #Apply the regularisation to the computed loss for each connected layer.
+                loss += 0.5 * self.reg * np.sum(layer.weights**2)
+                #Backward pass in the layer
                 dx, dw, db = layer.backward(dx)
                 #Stock dw and db in grads and apply the regularisation to dw.
-                grads.append({'w': dw + (self.reg * dw), 'b': db})
+                grads.append({'w': dw + (self.reg * layer.weights), 'b': db})
             else:
                 dx = layer.backward(dx)
         return loss, grads[::-1]
