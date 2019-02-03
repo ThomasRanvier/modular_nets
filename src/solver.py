@@ -20,8 +20,10 @@ class Solver(object):
             - 'X_val': Validation datas.
             - 'y_val': Validation labels.
         :param **kwargs: Optional parameters:
-            - optims: The optimisers to use, a list of any optimiser object found 
-              under the optims directory.
+            - optims: The optimisers to use, a list of 2D lists containing Optimiser
+              objects, the first dimension of the sub arrays is the optimiser of the
+              weights and the second one is for the biases. Each sub array 
+              corresponds to a connected layer.
             - lr_decay: A scalar for learning rate decay; after each epoch the
               learning rate is multiplied by this value.
             - batch_size: Size of minibatches used to compute loss and gradient
@@ -48,7 +50,7 @@ class Solver(object):
         #first layer not being a connected layer).
         default_optims = []
         for _ in range(len(self.model.layers_sizes) - 1):
-            default_optims.append(Adam())
+            default_optims.append([Adam(), Adam()])
         self.optims = kwargs.pop('optims', default_optims)
         self.lr_decay = kwargs.pop('lr_decay', 1.0)
         self.batch_size = kwargs.pop('batch_size', 100)
@@ -89,10 +91,12 @@ class Solver(object):
         self.loss_history.append(loss)
         #Update the parameters.
         i = 0
-        for layer in self.model.layers:
+        for layer in self.model.hidden_layers:
             if layer.layer_type == 'connected':
                 dw = grads[i]['w']
-                layer.weights = self.optims[i].update(layer.weights, dw)
+                layer.weights = self.optims[i][0].update(layer.weights, dw)
+                db = grads[i]['b']
+                layer.biases = self.optims[i][1].update(layer.biases, db)
                 i += 1
 
     def __save_checkpoint(self):
@@ -195,7 +199,8 @@ class Solver(object):
             if epoch_end:
                 self.epoch += 1
                 for i in range(len(self.optims)):
-                    self.optims[i].learning_rate *= self.lr_decay
+                    for j in range(len(self.optims[i])):
+                        self.optims[i][j].learning_rate *= self.lr_decay
             #Check train and val accuracy on the first iteration, the last
             #iteration, and at the end of each epoch.
             first_it = (t == 0)

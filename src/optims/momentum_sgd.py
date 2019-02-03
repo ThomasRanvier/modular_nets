@@ -48,7 +48,7 @@ class Momentum_sgd():
         """
         #If not initialised set the velocity to a numpy array full of zeros of 
         #the same shape as w.
-        if self.velocity == None:
+        if self.velocity is None:
             self.velocity = np.zeros_like(w)
         #Update the velocity
         self.velocity = self.velocity * self.momentum - self.learning_rate * dw

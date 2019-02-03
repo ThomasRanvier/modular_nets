@@ -7,39 +7,45 @@ class Net(object):
     """
     Class that implements a modular neural network.
 
-    You give it a list of layers that are all layers Objects initialised as you 
-    want.
+    You give it a list of hidden layers that are all layers Objects initialised as 
+    you want.
     You also have to give the network input and output sizes.
     You can set the initialiser with an initialiser object, the default one is
     He.
+    By default the list of hidden layers is empty, the net will then only contain
+    the output layer.
     """
-    def __init__(self, layers, input_size, output_size, initialiser = Initialiser(),
-            loss_computer = Loss_computer(), reg = 0.0):
+    def __init__(self, input_size, output_size, hidden_layers = [], 
+            initialiser = Initialiser(), loss_computer = Loss_computer(), reg = 0.):
         """
-        Instantiates a neural network with the layers and initialiser that you 
-        want.
-        :param layers: A list containing all the layers that you want in the 
-        network. /!\ It should not include an output layer!
-        :type layers: A list of layers objects.
+        Instantiates a neural network with the hidden layers and initialiser that 
+        you want.
         :param input_size: The size of the input of the network.
         :type input_size: integer.
         :param output_size: The size of the output of the network.
         :type output_size: integer.
+        :param hidden_layers: A list containing all the hidden layers that you want 
+        in the network. /!\ It should not include an output layer!
+        :type hidden_layers: A list of layers objects.
         :param initialiser: The initialiser for the weights, the default one is 
         He.
-        :type initialiser: initialiser Object.
+        :type initialiser: Initialiser Object.
+        :param loss_computer: The loss computer used to compute the loss of the net.
+        :type loss_computer: Loss_computer Object.
+        :param reg: The regularization to apply to the loss and gradients.
+        :type reg: float.
         """
-        self.layers = layers
+        self.hidden_layers = hidden_layers
         self.loss_computer = loss_computer
         #Recuperate the sizes of each connected layer.
         self.layers_sizes = [input_size]
-        for layer in layers:
+        for layer in hidden_layers:
             if layer.layer_type == 'connected':
                 self.layers_sizes.append(layer.size)
-        self.layers.append(Affine_layer(output_size))
+        self.hidden_layers.append(Affine_layer(output_size))
         self.layers_sizes.append(output_size)
         #Initialise the weights and biases.
-        initialiser.initialise(self.layers, self.layers_sizes)
+        initialiser.initialise(self.hidden_layers, self.layers_sizes)
         self.reg = reg
 
     def loss(self, X, y = None):
@@ -57,7 +63,7 @@ class Net(object):
         mode = 'test' if y is None else 'train'
         out = X
         #For each layer call forward.
-        for layer in self.layers:
+        for layer in self.hidden_layers:
             if layer.layer_type == 'connected' or layer.layer_type == 'activation':
                 out = layer.forward(out)
             elif layer.layer_type == 'normalisation':
@@ -69,9 +75,10 @@ class Net(object):
         loss, dx = self.loss_computer.compute_loss(scores, y)
         #For each layer call backward, and recuperate dw and db for connected ones.
         grads = []
-        for layer in self.layers[::-1]:
+        for layer in self.hidden_layers[::-1]:
             if layer.layer_type == 'connected':
-                #Apply the regularisation to the computed loss for each connected layer.
+                #Apply the regularisation to the computed loss for each connected 
+                #layer.
                 loss += 0.5 * self.reg * np.sum(layer.weights**2)
                 #Backward pass in the layer
                 dx, dw, db = layer.backward(dx)
