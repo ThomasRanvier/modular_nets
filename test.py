@@ -11,7 +11,7 @@ hidden_layers.append(Batch_norm_layer())
 hidden_layers.append(Relu_layer())
 hidden_layers.append(Affine_layer(3))
 hidden_layers.append(Batch_norm_layer())
-hidden_layers.append(Leaky_relu_layer())
+hidden_layers.append(Relu_layer())
 
 initialiser = Initialiser(config = {'method': 'normal', 'std_dev': 5e-2})
 net = Net(hidden_layers, input_size, output_size, initialiser = initialiser)

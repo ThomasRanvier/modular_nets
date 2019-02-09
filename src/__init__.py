@@ -1,4 +1,3 @@
-from src.layers.activation.leaky_relu_layer import Leaky_relu_layer
 from src.layers.activation.relu_layer import Relu_layer
 from src.layers.activation.sigmoid_layer import Sigmoid_layer
 from src.layers.activation.tanh_layer import Tanh_layer
